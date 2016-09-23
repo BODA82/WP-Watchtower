@@ -1,2 +1,2 @@
-# WP-Webmaster-Dashboard
-Custom dashboard features geared towards webmasters and content managers.
+# WP-Webmaster-Tools
+Custom WordPress ools for webmasters and content managers.
