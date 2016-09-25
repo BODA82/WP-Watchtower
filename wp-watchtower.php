@@ -46,3 +46,6 @@ $dashboard = new WP_Watchtower_Dashboard();
 
 require_once('classes/admin-settings.class.php');
 $settings_page = new WP_Watchtower_Settings();
+
+require_once('classes/content-alarms.class.php');
+$content_alarms = new WP_Watchtower_Alarms();

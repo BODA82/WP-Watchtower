@@ -23,7 +23,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 		//add_action('admin_init', array($this, 'settings_init'));
 		
 		// Register our options_page to the admin_menu action hook
-		//add_action('admin_menu', array($this, 'options_page'));
+		add_action('admin_menu', array($this, 'site_options_page'));
      	
 	}
 	 
@@ -41,7 +41,19 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	        array($this, 'network_dashboard_cb'),
 	        'wpw_network'
 	    );
-	 
+		
+		add_settings_field(
+	        'network_main_override', 
+	        __('Override All Sites', 'wpw'),
+	        array($this, 'network_main_override_cb'),
+	        'wpw_network',
+	        'wpw_network_override',
+	        [
+	            'label_for' => 'network_main_override',
+	            'class' => 'wpw_row',
+	        ]
+	    );
+		
 	    add_settings_field(
 	        'network_dashboard_override', 
 	        __('Override Default WordPress Dashboard', 'wpw'),
@@ -52,6 +64,18 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	            'label_for' => 'network_dashboard_override',
 	            'class' => 'wpw_row',
 	        ]
+	    );
+	    
+	    add_settings_field(
+		    'network_alarms_override',
+		    __('Override Site Content Alarms', 'wpw'),
+		    array($this, 'network_alarms_override_cb'),
+		    'wpw_network',
+		    'wpw_network_override',
+		    [
+			    'label_for' => 'network_alarms_override',
+			    'class' => 'wpw_row'
+		    ]
 	    );
 	}
 	 
@@ -64,6 +88,28 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	public function network_dashboard_cb($args) {
 	    ?>
 	    <p id="<?php echo esc_attr($args['id']); ?>"><?php echo esc_html__('The following settings will apply to all sites in your network and override the identical option on each individual site.', 'wpw'); ?></p>
+	    <?php
+	}
+	
+	/**
+	 * Network Main Override Callback
+	 *
+	 * Call back to display the network main override setting HTML.
+	 */
+	public function network_main_override_cb($args) {
+	    $options = get_site_option('wpw_options');
+	    ?>
+	    <select id="<?= esc_attr($args['label_for']); ?>" name="wpw_options[<?php echo esc_attr($args['label_for']); ?>]">
+	        <option value="enabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'enabled', false)) : (''); ?>>
+	            <?php echo esc_html('Enable', 'wpw'); ?>
+	        </option>
+	        <option value="disabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'disabled', false)) : (''); ?>>
+	            <?php echo esc_html('Disable', 'wpw'); ?>
+	        </option>
+	    </select>
+	    <p class="description">
+	        <?php echo esc_html('Enabling this option will override all sites in your Network and only allow control to WP Watchtower through both the Network admin and the site with blog_id "1".', 'wpw'); ?>
+	    </p>
 	    <?php
 	}
 	 
@@ -85,6 +131,28 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    </select>
 	    <p class="description">
 	        <?php echo esc_html('Enabling this option will override the default WordPress dashboard widgets and replace it with a WP Watchtower default set.', 'wpw'); ?>
+	    </p>
+	    <?php
+	}
+	
+	/**
+	 * Network Content Alarms Override Callback
+	 *
+	 * Call back to display the network content alarms override setting HTML.
+	 */
+	public function network_alarms_override_cb($args) {
+	    $options = get_site_option('wpw_options');
+	    ?>
+	    <select id="<?= esc_attr($args['label_for']); ?>" name="wpw_options[<?php echo esc_attr($args['label_for']); ?>]">
+	        <option value="enabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'enabled', false)) : (''); ?>>
+	            <?php echo esc_html('Enable', 'wpw'); ?>
+	        </option>
+	        <option value="disabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'disabled', false)) : (''); ?>>
+	            <?php echo esc_html('Disable', 'wpw'); ?>
+	        </option>
+	    </select>
+	    <p class="description">
+	        <?php echo esc_html('Enabling this option will force all content alarms to be controlled through the site with blog_id "1". If disabled, individual sites will be able to setup their own content alarms.', 'wpw'); ?>
 	    </p>
 	    <?php
 	}
@@ -154,5 +222,69 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    </div>
 	    <?php
 	}	
+	
+	/**
+	 * Site Options Page
+	 *
+	 * Register the top level menu item on individual site admin pages. If this is a multisite and
+	 * the main override option is enabled, only show the options page for blog_id "1".
+	 */
+	public function site_options_page() {
+		$options = get_site_option('wpw_options');
+		
+		if (is_multisite() && $options['network_main_override'] == 'enable') {
+			if (get_current_blog_id() == 1) {
+				add_menu_page(
+				    'WP Watchtower',
+			        'WP Watchtower',
+			        'manage_options',
+			        'wpw',
+			        array($this, 'site_options_page_html')
+			    );
+			}
+		} else {
+			add_menu_page(
+			    'WP Watchtower',
+		        'WP Watchtower',
+		        'manage_options',
+		        'wpw',
+		        array($this, 'site_options_page_html')
+		    );
+		}
+	   
+	}
+	
+	/**
+	 * Network Options Page HTML
+	 *
+	 * Callback to build the HTML for our Network admin page.
+	 */
+	public function site_options_page_html() {
+		
+	    // check user capabilities
+	    if (!current_user_can('manage_options')) {
+	        return;
+	    }
+	 
+	    // add error/update messages
+	    if (isset($_GET['settings-updated'])) {
+	        add_settings_error('wpw_messages', 'wpw_message', __('Settings Saved', 'wpw'), 'updated');
+	    }
+	 
+	    // show error/update messages
+	    settings_errors('wpw_messages');
+	    ?>
+	    <div class="wrap">
+	        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+	        <form action="edit.php?action=wpw_options" method="post">
+				<?php
+	            settings_fields('wpw_site');
+	            do_settings_sections('wpw_site');
+	            submit_button('Save Settings');
+	            ?>
+	        </form>
+	    </div>
+	    <?php
+	}
 		
 }
