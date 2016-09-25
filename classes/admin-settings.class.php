@@ -16,6 +16,14 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 		
 		// Register our network_options_page to the network_admin_menu action hook
 		add_action('network_admin_menu', array($this, 'network_options_page'));
+		
+		add_action('network_admin_edit_wpw_options', array($this, 'network_save_option'));
+		
+		// Register our settings_init to the admin_init action hook
+		//add_action('admin_init', array($this, 'settings_init'));
+		
+		// Register our options_page to the admin_menu action hook
+		//add_action('admin_menu', array($this, 'options_page'));
      	
 	}
 	 
@@ -28,20 +36,20 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    register_setting('wpw_network', 'wpw_options');
 	 
 	    add_settings_section(
-	        'wpw_section_override',
+	        'wpw_network_override',
 	        __('Network Override', 'wpw'),
 	        array($this, 'network_dashboard_cb'),
 	        'wpw_network'
 	    );
 	 
 	    add_settings_field(
-	        'wpw_field_network_dashboard_override', 
+	        'network_dashboard_override', 
 	        __('Override Default WordPress Dashboard', 'wpw'),
-	        array($this, 'field_dashboard_override_cb'),
+	        array($this, 'network_dashboard_override_cb'),
 	        'wpw_network',
-	        'wpw_section_override',
+	        'wpw_network_override',
 	        [
-	            'label_for' => 'wpw_field_network_dashboard_override',
+	            'label_for' => 'network_dashboard_override',
 	            'class' => 'wpw_row',
 	        ]
 	    );
@@ -60,7 +68,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	}
 	 
 	// pill field cb
-	public function field_dashboard_override_cb($args) {
+	public function network_dashboard_override_cb($args) {
 	    // get the value of the setting we've registered with register_setting()
 	    $options = get_option('wpw_options');
 	    // output the field
@@ -77,6 +85,21 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	        <?php echo esc_html('Enabling this option will override the default WordPress dashboard widgets and replace it with a WP Watchtower default set.', 'wpw'); ?>
 	    </p>
 	    <?php
+	}
+	
+	public function network_save_option() {
+		
+		update_site_option('wpw_options', $_POST['wpw_options']);
+		
+		// redirect to settings page in network
+		wp_redirect(
+		    add_query_arg(
+		        array('page' => 'wpw_network', 'updated' => 'true'),
+		        (is_multisite() ? network_admin_url('admin.php') : admin_url('admin.php'))
+		    )
+		);
+		exit;
+		
 	}
 	 
 	/**
@@ -119,7 +142,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    ?>
 	    <div class="wrap">
 	        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-	        <form action="options.php" method="post">
+	        <form action="edit.php?action=wpw_options" method="post">
 	            <?php
 	            settings_fields('wpw_network');
 	            do_settings_sections('wpw_network');
@@ -128,7 +151,6 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	        </form>
 	    </div>
 	    <?php
-	}
-		
+	}	
 		
 }
