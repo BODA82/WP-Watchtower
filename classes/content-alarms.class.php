@@ -11,7 +11,7 @@ class WP_Watchtower_Alarms extends WP_Watchtower {
      */
 	public function __construct() {
      	
-		add_action('init', array($this, 'register_content_alarms_cpt'), 0);
+		add_action('init', array($this, 'register_content_alarms_cpt'), 99);
      	
 	}
 
@@ -63,7 +63,7 @@ class WP_Watchtower_Alarms extends WP_Watchtower {
 			'public'                => true,
 			'show_ui'               => true,
 			'show_in_menu'          => 'wpw',
-			'menu_position'         => 5,
+			'menu_position'         => 25,
 			'show_in_admin_bar'     => false,
 			'show_in_nav_menus'     => false,
 			'can_export'            => true,

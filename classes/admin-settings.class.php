@@ -12,18 +12,18 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	public function __construct() {
      	
 		// Register our network_settings_init to the admin_init action hook
-		add_action('admin_init', array($this, 'network_settings_init'));
+		add_action('admin_init', array($this, 'network_settings_init'), 0);
 		
 		// Register our network_options_page to the network_admin_menu action hook
-		add_action('network_admin_menu', array($this, 'network_options_page'));
+		add_action('network_admin_menu', array($this, 'network_options_page'), 0);
 		
-		add_action('network_admin_edit_wpw_options', array($this, 'network_save_option'));
+		add_action('network_admin_edit_wpw_options', array($this, 'network_save_option'), 0);
 		
 		// Register our settings_init to the admin_init action hook
-		//add_action('admin_init', array($this, 'settings_init'));
+		add_action('admin_init', array($this, 'site_settings_init'), 0);
 		
 		// Register our options_page to the admin_menu action hook
-		add_action('admin_menu', array($this, 'site_options_page'));
+		add_action('admin_menu', array($this, 'site_options_page'), 0);
      	
 	}
 	 
@@ -92,7 +92,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	}
 	
 	/**
-	 * Network Main Override Callback
+	 * Network Main Override Field Callback
 	 *
 	 * Call back to display the network main override setting HTML.
 	 */
@@ -114,7 +114,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	}
 	 
 	/**
-	 * Network Dashboard Override Callback
+	 * Network Dashboard Override Field Callback
 	 *
 	 * Call back to display the network dashboard override setting HTML.
 	 */
@@ -136,7 +136,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	}
 	
 	/**
-	 * Network Content Alarms Override Callback
+	 * Network Content Alarms Override Field Callback
 	 *
 	 * Call back to display the network content alarms override setting HTML.
 	 */
@@ -221,7 +221,68 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	        </form>
 	    </div>
 	    <?php
-	}	
+	}
+	
+	/**
+	 * Site Settings Init
+	 * 
+	 * Register settings for individual sites.
+	 */
+	public function site_settings_init() {
+	    register_setting('wpw_site', 'wpw_options');
+	 
+	    add_settings_section(
+	        'wpw_site_override',
+	        __('Site Override', 'wpw'),
+	        array($this, 'site_dashboard_cb'),
+	        'wpw_site'
+	    );
+		
+	    add_settings_field(
+	        'site_dashboard_override', 
+	        __('Override Default WordPress Dashboard', 'wpw'),
+	        array($this, 'site_dashboard_override_cb'),
+	        'wpw_site',
+	        'wpw_site_override',
+	        [
+	            'label_for' => 'site_dashboard_override',
+	            'class' => 'wpw_row',
+	        ]
+	    );
+	}
+	
+	/**
+	 * Site Dashboard Section Callback
+	 *
+	 * Callback to display the section for replacing the default WordPress Dashboard widgets.
+	 */
+	public function site_dashboard_cb($args) {
+	    ?>
+	    <p id="<?php echo esc_attr($args['id']); ?>"><?php echo esc_html__('The following settings will apply override default WordPress settings.', 'wpw'); ?></p>
+	    <?php
+	}
+	
+	/**
+	 * Site Dashboard Override Field Callback
+	 *
+	 * Call back to display the network dashboard override setting HTML.
+	 */
+	public function site_dashboard_override_cb($args) {
+	    $options = get_option('wpw_options');
+	    ?>
+	    <select id="<?= esc_attr($args['label_for']); ?>" name="wpw_options[<?php echo esc_attr($args['label_for']); ?>]">
+	        <option value="enabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'enabled', false)) : (''); ?>>
+	            <?php echo esc_html('Enable', 'wpw'); ?>
+	        </option>
+	        <option value="disabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'disabled', false)) : (''); ?>>
+	            <?php echo esc_html('Disable', 'wpw'); ?>
+	        </option>
+	    </select>
+	    <p class="description">
+	        <?php echo esc_html('Enabling this option will override the default WordPress dashboard widgets and replace it with a WP Watchtower default set.', 'wpw'); ?>
+	    </p>
+	    <?php
+	}
 	
 	/**
 	 * Site Options Page

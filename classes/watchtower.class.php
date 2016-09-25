@@ -32,9 +32,9 @@ class WP_Watchtower {
 	/**
 	 * Determins if the dashboard override is enabled.
 	 *
-	 * @param string $type    		"network" or "site"
+	 * @param string $type    		Accepts: "network" or "site"
 	 *
-	 * @return string               An error message.
+	 * @return boolean				True / False
 	 */
 	public function dashboard_override_enabled($type) {
 		if ($type == 'network') {
