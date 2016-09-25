@@ -67,11 +67,13 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    <?php
 	}
 	 
-	// pill field cb
+	/**
+	 * Network Dashboard Override Callback
+	 *
+	 * Call back to display the network dashboard override setting HTML.
+	 */
 	public function network_dashboard_override_cb($args) {
-	    // get the value of the setting we've registered with register_setting()
-	    $options = get_option('wpw_options');
-	    // output the field
+	    $options = get_site_option('wpw_options');
 	    ?>
 	    <select id="<?= esc_attr($args['label_for']); ?>" name="wpw_options[<?php echo esc_attr($args['label_for']); ?>]">
 	        <option value="enabled" <?= isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'enabled', false)) : (''); ?>>
@@ -87,19 +89,20 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    <?php
 	}
 	
+	/**
+	 * Network Save Option
+	 *
+	 * Callback to save the network options.
+	 */
 	public function network_save_option() {
-		
 		update_site_option('wpw_options', $_POST['wpw_options']);
-		
-		// redirect to settings page in network
 		wp_redirect(
 		    add_query_arg(
-		        array('page' => 'wpw_network', 'updated' => 'true'),
+		        array('page' => 'wpw_network', 'settings-updated' => 'true'),
 		        (is_multisite() ? network_admin_url('admin.php') : admin_url('admin.php'))
 		    )
 		);
 		exit;
-		
 	}
 	 
 	/**
@@ -108,7 +111,6 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	 * Register the top level menu item on the Network admin page.
 	 */
 	public function network_options_page() {
-	    // add top level menu page
 	    add_menu_page(
 	        'WP Watchtower',
 	        'WP Watchtower',
@@ -126,6 +128,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	 * Callback to build the HTML for our Network admin page.
 	 */
 	public function network_options_page_html() {
+		
 	    // check user capabilities
 	    if (!current_user_can('manage_network')) {
 	        return;
@@ -133,7 +136,6 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	 
 	    // add error/update messages
 	    if (isset($_GET['settings-updated'])) {
-	        // add settings saved message with the class of "updated"
 	        add_settings_error('wpw_messages', 'wpw_message', __('Settings Saved', 'wpw'), 'updated');
 	    }
 	 
