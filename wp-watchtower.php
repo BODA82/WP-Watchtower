@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WP Watchtower
-Plugin URI:  http://www.elon.edu/e/university-communications/wordpress/plugins/wp-watchtower.html
+Plugin URI:  http://cspir.es
 Description: Custom WordPress tools for webmasters and content managers.
 Version:     0.0.1
-Author:      Elon University
-Author URI:  http://www.elon.edu
+Author:      Christopher Spires
+Author URI:  http://cspir.es
 License:     GPL3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Domain Path: /languages
@@ -42,7 +42,7 @@ function wpw_admin_enqueue() {
 }
 
 require_once('classes/admin-dashboard.class.php');
-$test = new WP_Watchtower_Dashboard();
+$dashboard = new WP_Watchtower_Dashboard();
 
 require_once('classes/admin-settings.class.php');
 $settings_page = new WP_Watchtower_Settings();
