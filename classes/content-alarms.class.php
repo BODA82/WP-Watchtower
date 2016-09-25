@@ -25,7 +25,7 @@ class WP_Watchtower_Alarms extends WP_Watchtower {
 			'name_admin_bar'        => __('Content Alarms', 'wpw'),
 			'archives'              => __('Content Alarm Archives', 'wpw'),
 			'parent_item_colon'     => __('Parent Content Alarm', 'wpw'),
-			'all_items'             => __('All Content Alarms', 'wpw'),
+			'all_items'             => __('Content Alarms', 'wpw'),
 			'add_new_item'          => __('Add New Content Alarm', 'wpw'),
 			'add_new'               => __('Add New', 'wpw'),
 			'new_item'              => __('New Content Alarm', 'wpw'),
@@ -62,7 +62,7 @@ class WP_Watchtower_Alarms extends WP_Watchtower {
 			'hierarchical'          => false,
 			'public'                => true,
 			'show_ui'               => true,
-			'show_in_menu'          => false,
+			'show_in_menu'          => 'wpw',
 			'menu_position'         => 5,
 			'show_in_admin_bar'     => false,
 			'show_in_nav_menus'     => false,
@@ -73,11 +73,10 @@ class WP_Watchtower_Alarms extends WP_Watchtower {
 			'capabilities'          => $capabilities
 		);
 		
-		
-		
-		register_post_type('wpw_content_alarms', $args);
-	
+		if ($this->main_override_enabled()) {
+			register_post_type('wpw_content_alarms', $args);
+		} else {
+			register_post_type('wpw_content_alarms', $args);
+		}
 	}
-	
-		
 }

@@ -229,11 +229,8 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	 * Register the top level menu item on individual site admin pages. If this is a multisite and
 	 * the main override option is enabled, only show the options page for blog_id "1".
 	 */
-	public function site_options_page() {
-		$options = get_site_option('wpw_options');
-		
-		if (is_multisite() && $options['network_main_override'] == 'enable') {
-			if (get_current_blog_id() == 1) {
+	public function site_options_page() {	
+		if ($this->main_override_enabled()) {
 				add_menu_page(
 				    'WP Watchtower',
 			        'WP Watchtower',
@@ -241,7 +238,6 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 			        'wpw',
 			        array($this, 'site_options_page_html')
 			    );
-			}
 		} else {
 			add_menu_page(
 			    'WP Watchtower',
