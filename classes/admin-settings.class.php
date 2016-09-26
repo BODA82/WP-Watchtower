@@ -333,7 +333,7 @@ class WP_Watchtower_Settings extends WP_Watchtower {
 	    ?>
 	    <div class="wrap">
 	        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-	        <form action="edit.php?action=wpw_options" method="post">
+	        <form action="options.php" method="post">
 				<?php
 	            settings_fields('wpw_site');
 	            do_settings_sections('wpw_site');
