@@ -3,7 +3,6 @@
 [![WordPress](https://img.shields.io/badge/wordpress-dev-red.svg?maxAge=2592000)]() 
 [![WordPress plugin](https://img.shields.io/badge/plugin-v0.0.1-blue.svg?maxAge=2592000)]() 
 [![License](http://img.shields.io/:license-gpl3-blue.svg?maxAge=2592000)](http://www.gnu.org/licenses/gpl-3.0.html)
-[![Twitter Follow](https://img.shields.io/twitter/follow/shields_io.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/boda82)
 
 Custom WordPress tools for webmasters and content managers.
 
