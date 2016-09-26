@@ -4,6 +4,15 @@ Custom WordPress tools for webmasters and content managers.
 
 **Currently under development. Do not use in production.**
 
+## About this Plugin
+
+## Features
+
+* **Favorite Pages** - Have the ability to set content (pages, custom post types, etc.) as a "favorite" and easily access it through the WordPress admin. 
+* **Content Review** - Set a review date for content and either receive notifications as the date approaches or easily access a content review schedule via the WordPress admin. 
+* **Content Alarms** - Receive notifications when certain content is saved to your WordPress site. For example, if someone embeds a PayPal button in a page, receive a notification letting you know it's been added. Alarms can be setup for simple strings or RegEx patterns. This comes in handy when you have numerous content editors and you want to keep track of who's adding potentially risky content to your site. 
+* More to come...
+
 ## License
 
 GPLv3
