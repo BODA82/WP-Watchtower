@@ -9,7 +9,7 @@ Custom WordPress tools for webmasters and content managers.
 
 **Currently under development. Do not use in production.**
 
-WP-Watchtower was born of a need to help manage content on large WordPress installs, often Multisite/Network installs, with hundreds (or thousands) of pages and dozens of content editors/managers. Specifically, it was built to help manage the WordPress install serves as the CMS for Elon University websites.
+WP-Watchtower was born of a need to help manage content on large WordPress installs, often Multisite/Network installs, with hundreds (or thousands) of pages and dozens of content editors/managers. Specifically, it was built to help manage the WordPress install that serves as the CMS for Elon University websites.
 
 Each of the features listed below were built in hopes to help automate, organize, or otherwise assist webmasters and content managers with common tasks and processes and make their lives (hopefully) a little bit easier.
 
