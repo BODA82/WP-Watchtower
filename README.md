@@ -1,10 +1,14 @@
 # WP-Watchtower
 
+[![WordPress](https://img.shields.io/badge/wordpress-4.6.1%20tested-brightgreen.svg?maxAge=2592000)]() 
+[![WordPress](https://img.shields.io/badge/build-dev-red.svg?maxAge=2592000)]() 
+[![WordPress plugin](https://img.shields.io/badge/plugin-v0.0.1-blue.svg?maxAge=2592000)]() 
+[![License](http://img.shields.io/:license-gpl3-blue.svg?maxAge=2592000)](http://www.gnu.org/licenses/gpl-3.0.html)
+[![Twitter Follow](https://img.shields.io/twitter/follow/shields_io.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/boda82)
+
 Custom WordPress tools for webmasters and content managers.
 
 **Currently under development. Do not use in production.**
-
-## About this Plugin
 
 WP-Watchtower was born of a need to help manage content on large WordPress installs, often Multisite/Network installs, with hundreds (or thousands) of pages and dozens of content editors/managers. Specifically, it was built to help manage the WordPress install serves as the CMS for Elon University websites.
 
