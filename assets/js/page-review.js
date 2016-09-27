@@ -13,28 +13,25 @@
 		event.preventDefault();
 	});
 	
-	$('.cancel-review-date').click( function( event ) {
+	$('.cancel-review-date').click(function(event) {
 		reviewtimestampdiv.slideUp('fast').siblings('a.edit-review-date').show().focus();
-		$('#mm').val($('#hidden_mm').val());
-		$('#jj').val($('#hidden_jj').val());
-		$('#aa').val($('#hidden_aa').val());
-		$('#hh').val($('#hidden_hh').val());
-		$('#mn').val($('#hidden_mn').val());
-		updateReviewText();
 		event.preventDefault();
 	});
 	
-	$('.save-review-date').click( function( event ) { 
-		if (updateReviewText() ) {
-			reviewtimestampdiv.slideUp('fast');
-			reviewtimestampdiv.siblings('a.edit-review-date').show().focus();
-		}
-		event.preventDefault();
-	});
-	
-	function updateReviewText() {
+	$('.reset-review-date').click(function(event) {
+		reviewtimestampdiv.slideUp('fast').siblings('a.edit-review-date').show().focus();
 		
-		return true;	
-	}
+		$('#wpw-review-set').val('notset');
+		
+		event.preventDefault();
+	});
+	
+	$('.save-review-date').click(function(event) {
+		reviewtimestampdiv.slideUp('fast').siblings('a.edit-review-date').show().focus();
+		
+		$('#wpw-review-set').val('set');
+		
+		event.preventDefault();
+	});
 		
 }(jQuery));
