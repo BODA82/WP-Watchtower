@@ -1,0 +1,32 @@
+#wpw-page-review-date {
+	
+	display: inline-block !important;
+	height: auto !important;
+	
+	&:before {
+		color: #82878c;
+		margin-right: 2px;
+	}
+	
+	.overview {
+		color: #ff0000;
+	}
+	
+}
+
+.review-date-wrap {
+	
+	select {
+		height: 21px;
+		line-height: 14px;
+		padding: 0;
+		vertical-align: top;
+		font-size: 12px;
+	}
+	
+	input {
+		height: 19px;
+		font-size: 12px;
+	}
+	
+}

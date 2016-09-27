@@ -15,7 +15,9 @@ Text Domain: wpw
 /*
  * Plugin activation and deactivation
  */
- 
+
+$plugin_version = '0.0.1';
+
 register_activation_hook(__FILE__, 'wpw_activation');
 register_deactivation_hook(__FILE__, 'wpw_deactivation');
 
@@ -35,17 +37,29 @@ function wpw_deactivation() {
 add_action('admin_enqueue_scripts', 'wpw_admin_enqueue');
 
 function wpw_admin_enqueue() {
-	//wp_enqueue_script( 'script-name', get_template_directory_uri() . '/js/example.js', array(), '1.0.0', true );
+	global $plugin_version;
 	
+	// Custom global admin scripts
+	wp_enqueue_script('wpw-admin-scripts', plugins_url('assets/js/global-admin.js', __FILE__), array('jquery'), $plugin_version, true);
+	
+	// Page review date admin scripts
+	wp_enqueue_script('wpw-page-review', plugins_url('assets/js/page-review.js', __FILE__), array('jquery'), $plugin_version, true);
+	
+	// Font Awesome styles
 	wp_register_style('font-awesome', plugins_url('assets/vendor/font-awesome/css/font-awesome.min.css', __FILE__), array(), '4.6.3', 'all');
 	wp_enqueue_style('font-awesome');
+	
+	// Custom admin styles
+	wp_register_style('wpw-admin-styles', plugins_url('assets/styles/css/admin.css', __FILE__), array(), $plugin_version, 'all');
+	wp_enqueue_style('wpw-admin-styles');
 }
 
-require_once('classes/admin-dashboard.class.php');
+foreach (glob(plugin_dir_path(__FILE__) . 'classes/*.class.php') as $filename) {
+    include_once $filename;
+}
+
+// Going to break this down later to only load classes when needed. Just being lazy right now.
 $dashboard = new WP_Watchtower_Dashboard();
-
-require_once('classes/admin-settings.class.php');
 $settings_page = new WP_Watchtower_Settings();
-
-require_once('classes/content-alarms.class.php');
 $content_alarms = new WP_Watchtower_Alarms();
+$page_review = new WP_Watchtower_Page_review();
